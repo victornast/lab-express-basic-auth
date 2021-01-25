@@ -1,0 +1,32 @@
+{{#with user}}
+<h1>Edit {{ username }}'s profile</h1>
+<form method="POST">
+  <label for="input-username">Username</label>
+  <input 
+    id="input-username"
+    type="text"
+    name="username"
+    placeholder={{ username }}
+    value={{ username }}
+    required
+  />
+
+  <label for="input-name">Name</label>
+  <input
+    id="input-name"
+    type="name"
+    name="name"
+    {{#if name}}placeholder={{ name }}
+    value={{ name }}{{/if}}
+  />
+
+  <label for="input-password">Password</label>
+  <input
+    id="input-password"
+    type="password"
+    name="password"
+    placeholder="A new password?"
+  />
+
+  <button>Submit changes</button>
+{{/with}}

@@ -1,4 +1,6 @@
 {{#with user}}
 <h1>{{ username }}'s profile</h1>
+{{#if name}}<h2>Name: {{ name }}</h2>{{/if}}
 <h2>id: {{ _id }}</h2>
 {{/with}}
+<a href="/profile/edit">Edit Profile</a>
