@@ -8,10 +8,13 @@ const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
 const mongoose = require('mongoose');
 
+const User = require('./models/user');
+
 const MongoStore = connectMongo(expressSession);
 
 const indexRouter = require('./routes/index');
 const authenticationRouter = require('./routes/authentication');
+const userRouter = require('./routes/userfunction');
 
 const app = express();
 
@@ -52,8 +55,27 @@ app.use(
   })
 );
 
+// Deserializing the user
+const userDeserializationMiddleware = (req, res, next) => {
+  if (req.session.userId) {
+    User.findById(req.session.userId)
+      .then((user) => {
+        req.user = user;
+        res.locals.user = user;
+        next();
+      })
+      .catch((error) => {
+        next(error);
+      });
+  } else {
+    next();
+  }
+};
+app.use(userDeserializationMiddleware);
+
 app.use('/', indexRouter);
 app.use('/authentication', authenticationRouter);
+app.use('/profile', userRouter);
 
 // Catch missing routes and forward to error handler
 app.use((req, res, next) => {
