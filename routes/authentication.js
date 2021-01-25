@@ -28,9 +28,37 @@ router.post('/signup', (req, res, next) => {
         password: password
       });
     })
-    .then((user) => {
-      req.session.userId = user._id;
+    .then(() => {
       res.redirect('/?new=true');
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+router.get('/login', (req, res, next) => {
+  res.render('authentication/login');
+});
+
+router.post('/login', (req, res, next) => {
+  const data = req.body;
+  let user;
+  User.findOne({ username: data.username })
+    .then((doc) => {
+      user = doc;
+      if (user) {
+        return bcryptjs.compare(data.password, user.password);
+      } else {
+        throw new Error('Username could not be found.');
+      }
+    })
+    .then((result) => {
+      if (result) {
+        req.session.userId = user._id;
+        res.redirect('/?enter=true');
+      } else {
+        throw new Error("The password doesn't match.");
+      }
     })
     .catch((error) => {
       next(error);
