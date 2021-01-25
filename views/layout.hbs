@@ -10,6 +10,9 @@
       {{#if user}}
         <a href="/profile/main">Main</a>
         <a href="/profile/private">Private GIF</a>
+        <form method="POST" action="/authentication/logout">
+          <button>Log Out</button>
+        </form>
       {{else}}
         <a href="/authentication/signup">Sign Up</a>
         <a href="/authentication/login">Log In</a>
